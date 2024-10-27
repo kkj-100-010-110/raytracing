@@ -1,0 +1,46 @@
+{
+	"sources" : 
+	[
+		{
+			"file" : "/Users/gyeongjukim/my_git/raytracing/build/CMakeFiles/dep_glm"
+		},
+		{
+			"file" : "/Users/gyeongjukim/my_git/raytracing/build/CMakeFiles/dep_glm.rule"
+		},
+		{
+			"file" : "/Users/gyeongjukim/my_git/raytracing/build/CMakeFiles/dep_glm-complete.rule"
+		},
+		{
+			"file" : "/Users/gyeongjukim/my_git/raytracing/build/dep_glm-prefix/src/dep_glm-stamp/dep_glm-build.rule"
+		},
+		{
+			"file" : "/Users/gyeongjukim/my_git/raytracing/build/dep_glm-prefix/src/dep_glm-stamp/dep_glm-configure.rule"
+		},
+		{
+			"file" : "/Users/gyeongjukim/my_git/raytracing/build/dep_glm-prefix/src/dep_glm-stamp/dep_glm-download.rule"
+		},
+		{
+			"file" : "/Users/gyeongjukim/my_git/raytracing/build/dep_glm-prefix/src/dep_glm-stamp/dep_glm-install.rule"
+		},
+		{
+			"file" : "/Users/gyeongjukim/my_git/raytracing/build/dep_glm-prefix/src/dep_glm-stamp/dep_glm-mkdir.rule"
+		},
+		{
+			"file" : "/Users/gyeongjukim/my_git/raytracing/build/dep_glm-prefix/src/dep_glm-stamp/dep_glm-patch.rule"
+		},
+		{
+			"file" : "/Users/gyeongjukim/my_git/raytracing/build/dep_glm-prefix/src/dep_glm-stamp/dep_glm-test.rule"
+		},
+		{
+			"file" : "/Users/gyeongjukim/my_git/raytracing/build/dep_glm-prefix/src/dep_glm-stamp/dep_glm-update.rule"
+		}
+	],
+	"target" : 
+	{
+		"labels" : 
+		[
+			"dep_glm"
+		],
+		"name" : "dep_glm"
+	}
+}
