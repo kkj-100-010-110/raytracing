@@ -8,43 +8,6 @@
 
 int main()
 {
-    // /* Timer Begin */
-    // Timer timer;
-
-    // HittableList world;
-
-    // auto materialGround = make_shared<Lambertian>(color(0.8, 0.8, 0.0, 0.0));
-    // auto materialCenter = make_shared<Lambertian>(color(0.1, 0.2, 0.5, 0.0));
-    // auto materialLeft   = make_shared<Dielectric>(1.50);
-    // auto materialBubble = make_shared<Dielectric>(1.00 / 1.50);
-    // auto materialRight  = make_shared<Metal>(color(0.8, 0.6, 0.2, 0.0), 1.0);
-
-    // world.add(make_shared<Sphere>(glm::dvec4( 0.0, -100.5, -1.0, 0.0), 100.0, materialGround));
-    // world.add(make_shared<Sphere>(glm::dvec4( 0.0,    0.0, -1.2, 0.0),   0.5, materialCenter));
-    // world.add(make_shared<Sphere>(glm::dvec4(-1.0,    0.0, -1.0, 0.0),   0.5, materialLeft));
-    // world.add(make_shared<Sphere>(glm::dvec4(-1.0,    0.0, -1.0, 0.0),   0.4, materialBubble));
-    // world.add(make_shared<Sphere>(glm::dvec4( 1.0,    0.0, -1.0, 0.0),   0.5, materialRight));
-
-    // Camera cam;
-
-    // cam.aspectRatio      = 16.0 / 9.0;
-    // cam.imageWidth       = 400;
-    // cam.samplesPerPixel = 100;
-    // cam.maxDepth         = 50;
-
-    // cam.vfov     = 20;
-    // cam.lookFrom = glm::dvec4(-2, 2, 1, 0.0);
-    // cam.lookAt   = glm::dvec4(0, 0, -1, 0.0);
-    // cam.vUp      = glm::dvec4(0, 1, 0, 0);
-
-    // cam.defocusAngle = 10.0;
-    // cam.focusDist    = 3.4;
-
-    // cam.render(world);
-
-    // /* Timer End */
-    // timer.elapsed();
-    
     /* Timer Begin */
     Timer timer;
 
@@ -69,7 +32,8 @@ int main()
                     // diffuse
                     auto albedo = randomVector() * randomVector();
                     sphereMaterial = make_shared<Lambertian>(albedo);
-                    world.add(make_shared<Sphere>(center, 0.2, sphereMaterial));
+                    auto center2 = center + glm::dvec4(0, randomDouble(0,.5), 0, 0);
+                    world.add(make_shared<Sphere>(center, center2, 0.2, sphereMaterial));
                 }
                 else if (chooseMat < 0.95)
                 {
@@ -101,8 +65,8 @@ int main()
     Camera cam;
 
     cam.aspectRatio = 16.0 / 9.0;
-    cam.imageWidth = 1200;
-    cam.samplesPerPixel = 500;
+    cam.imageWidth = 400;
+    cam.samplesPerPixel = 100;
     cam.maxDepth = 50;
 
     cam.vfov = 20;

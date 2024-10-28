@@ -102,8 +102,9 @@ public:
 
         auto rayOrigin = (defocusAngle <= 0) ? center : defocusDiskSample();;
         auto rayDirection = pixelSample - rayOrigin;
+        auto rayTime = randomDouble();
 
-        return Ray(rayOrigin, rayDirection);
+        return Ray(rayOrigin, rayDirection, rayTime);
     }
 
     glm::dvec4 sampleSquare() const

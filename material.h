@@ -27,7 +27,7 @@ public:
         if (nearZero(scatterDirection))
             scatterDirection = rec.normal;
 
-        scattered = Ray(rec.p, scatterDirection);
+        scattered = Ray(rec.p, scatterDirection, rIn.time());
         attenuation = albedo;
         return true;
     }
@@ -44,8 +44,9 @@ public:
     bool scatter(const Ray &rIn, const HitRecord &rec, color &attenuation, Ray &scattered) const override
     {
         glm::dvec4 reflected = glm::reflect(rIn.direction(), rec.normal);
-        reflected = glm::normalize(reflected) + (fuzz + randomUnitVector());
-        scattered = Ray(rec.p, reflected);
+        // reflected = glm::normalize(reflected) + (fuzz + randomUnitVector());
+        reflected = glm::normalize(reflected);
+        scattered = Ray(rec.p, reflected, rIn.time());
         attenuation = albedo;
         return glm::dot(scattered.direction(), rec.normal) > 0;
     }
@@ -78,7 +79,7 @@ public:
         else
             direction = glm::refract(unitDirection, rec.normal, ri);
 
-        scattered = Ray(rec.p, direction);
+        scattered = Ray(rec.p, direction, rIn.time());
 
         return true;
     }

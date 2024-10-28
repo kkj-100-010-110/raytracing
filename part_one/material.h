@@ -44,7 +44,10 @@ public:
     bool scatter(const Ray &rIn, const HitRecord &rec, color &attenuation, Ray &scattered) const override
     {
         glm::dvec4 reflected = glm::reflect(rIn.direction(), rec.normal);
-        reflected = glm::normalize(reflected) + (fuzz + randomUnitVector());
+        // fuzzy reflection
+        // reflected = glm::normalize(reflected) + (fuzz + randomUnitVector());
+        // non-fuzzy reflection
+        reflected = glm::normalize(reflected);
         scattered = Ray(rec.p, reflected);
         attenuation = albedo;
         return glm::dot(scattered.direction(), rec.normal) > 0;
