@@ -1,4 +1,0 @@
-/Users/gyeongjukim/my_git/raytracing/part_one/build/CMakeFiles/RT.dir
-/Users/gyeongjukim/my_git/raytracing/part_one/build/CMakeFiles/dep_glm.dir
-/Users/gyeongjukim/my_git/raytracing/part_one/build/CMakeFiles/edit_cache.dir
-/Users/gyeongjukim/my_git/raytracing/part_one/build/CMakeFiles/rebuild_cache.dir
