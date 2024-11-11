@@ -1,13 +1,13 @@
 #ifndef _COMMON_H_
 #define _COMMON_H_
 
-#include <cmath>
 #include <iostream>
 #include <limits>
 #include <memory>
 #include <random>
 #include <algorithm>
 #include <chrono> // for Timer class
+#include <cmath>
 
 /* GLM */
 #include <glm/glm.hpp>
@@ -109,6 +109,9 @@ inline glm::dvec4 randomInUnitDisk()
             return p;
     }
 }
+
+// Returns a random integer in [min,max].
+inline int randomInt(int min, int max) { return int(randomDouble(min, max + 1)); }
 
 // Common Headers
 #include "color.h"

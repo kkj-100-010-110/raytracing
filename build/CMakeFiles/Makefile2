@@ -65,6 +65,7 @@ CMAKE_BINARY_DIR = /Users/gyeongjukim/my_git/raytracing/build
 # The main recursive "all" target.
 all: CMakeFiles/RT.dir/all
 all: CMakeFiles/dep_glm.dir/all
+all: CMakeFiles/dep_stb.dir/all
 .PHONY : all
 
 # The main recursive "preinstall" target.
@@ -74,6 +75,7 @@ preinstall:
 # The main recursive "clean" target.
 clean: CMakeFiles/RT.dir/clean
 clean: CMakeFiles/dep_glm.dir/clean
+clean: CMakeFiles/dep_stb.dir/clean
 .PHONY : clean
 
 #=============================================================================
@@ -81,6 +83,7 @@ clean: CMakeFiles/dep_glm.dir/clean
 
 # All Build rule for target.
 CMakeFiles/RT.dir/all: CMakeFiles/dep_glm.dir/all
+CMakeFiles/RT.dir/all: CMakeFiles/dep_stb.dir/all
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/RT.dir/build.make CMakeFiles/RT.dir/depend
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/RT.dir/build.make CMakeFiles/RT.dir/build
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/Users/gyeongjukim/my_git/raytracing/build/CMakeFiles --progress-num=1,2 "Built target RT"
@@ -88,7 +91,7 @@ CMakeFiles/RT.dir/all: CMakeFiles/dep_glm.dir/all
 
 # Build rule for subdir invocation for target.
 CMakeFiles/RT.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /Users/gyeongjukim/my_git/raytracing/build/CMakeFiles 11
+	$(CMAKE_COMMAND) -E cmake_progress_start /Users/gyeongjukim/my_git/raytracing/build/CMakeFiles 20
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/RT.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /Users/gyeongjukim/my_git/raytracing/build/CMakeFiles 0
 .PHONY : CMakeFiles/RT.dir/rule
@@ -127,6 +130,32 @@ dep_glm: CMakeFiles/dep_glm.dir/rule
 CMakeFiles/dep_glm.dir/clean:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/dep_glm.dir/build.make CMakeFiles/dep_glm.dir/clean
 .PHONY : CMakeFiles/dep_glm.dir/clean
+
+#=============================================================================
+# Target rules for target CMakeFiles/dep_stb.dir
+
+# All Build rule for target.
+CMakeFiles/dep_stb.dir/all:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/dep_stb.dir/build.make CMakeFiles/dep_stb.dir/depend
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/dep_stb.dir/build.make CMakeFiles/dep_stb.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/Users/gyeongjukim/my_git/raytracing/build/CMakeFiles --progress-num=12,13,14,15,16,17,18,19,20 "Built target dep_stb"
+.PHONY : CMakeFiles/dep_stb.dir/all
+
+# Build rule for subdir invocation for target.
+CMakeFiles/dep_stb.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start /Users/gyeongjukim/my_git/raytracing/build/CMakeFiles 9
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/dep_stb.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /Users/gyeongjukim/my_git/raytracing/build/CMakeFiles 0
+.PHONY : CMakeFiles/dep_stb.dir/rule
+
+# Convenience name for target.
+dep_stb: CMakeFiles/dep_stb.dir/rule
+.PHONY : dep_stb
+
+# clean rule for target.
+CMakeFiles/dep_stb.dir/clean:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/dep_stb.dir/build.make CMakeFiles/dep_stb.dir/clean
+.PHONY : CMakeFiles/dep_stb.dir/clean
 
 #=============================================================================
 # Special targets to cleanup operation of make.

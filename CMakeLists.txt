@@ -22,6 +22,11 @@ add_executable(${PROJECT_NAME}
     interval.h
     camera.h
     material.h
+    aabb.h
+    texture.h
+    rtw_stb_image.h
+    perlin.h
+    quad.h
     )
 
 target_include_directories(${PROJECT_NAME} PUBLIC ${DEP_INCLUDE_DIR})
@@ -50,6 +55,23 @@ ExternalProject_Add(
         ${DEP_INSTALL_DIR}/include/glm
     )
 set(DEP_LIST ${DEP_LIST} dep_glm)
+
+# stb_image
+ExternalProject_Add(
+    dep_stb
+    GIT_REPOSITORY "https://github.com/nothings/stb"
+    GIT_TAG "master"
+    GIT_SHALLOW 1
+    UPDATE_COMMAND ""
+    PATCH_COMMAND ""
+    CONFIGURE_COMMAND ""
+    BUILD_COMMAND ""
+    TEST_COMMAND ""
+    INSTALL_COMMAND ${CMAKE_COMMAND} -E copy
+        ${PROJECT_BINARY_DIR}/dep_stb-prefix/src/dep_stb/stb_image.h
+        ${DEP_INSTALL_DIR}/include/stb/stb_image.h
+    )
+set(DEP_LIST ${DEP_LIST} dep_stb)
 
 # 우리 프로젝트에 include / lib 관련 옵션 추가
 target_include_directories(${PROJECT_NAME} PUBLIC ${DEP_INCLUDE_DIR})

@@ -142,6 +142,19 @@ dep_glm/fast:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/dep_glm.dir/build.make CMakeFiles/dep_glm.dir/build
 .PHONY : dep_glm/fast
 
+#=============================================================================
+# Target rules for targets named dep_stb
+
+# Build rule for target.
+dep_stb: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 dep_stb
+.PHONY : dep_stb
+
+# fast build rule for target.
+dep_stb/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/dep_stb.dir/build.make CMakeFiles/dep_stb.dir/build
+.PHONY : dep_stb/fast
+
 main.o: main.cpp.o
 .PHONY : main.o
 
@@ -175,6 +188,7 @@ help:
 	@echo "... edit_cache"
 	@echo "... rebuild_cache"
 	@echo "... dep_glm"
+	@echo "... dep_stb"
 	@echo "... RT"
 	@echo "... main.o"
 	@echo "... main.i"

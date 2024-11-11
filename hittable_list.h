@@ -8,7 +8,7 @@
 
 class HittableList : public Hittable
 {
-  public:
+public:
     std::vector<shared_ptr<Hittable>> objects;
 
     HittableList() {}
@@ -16,7 +16,11 @@ class HittableList : public Hittable
 
     void clear() { objects.clear(); }
 
-    void add(shared_ptr<Hittable> object) { objects.emplace_back(object); }
+    void add(shared_ptr<Hittable> object)
+    {
+        objects.emplace_back(object);
+        bbox = Aabb(bbox, object->boundingBox());
+    }
 
     bool hit(const Ray& r, Interval rayT, HitRecord& rec) const override
     {
@@ -36,6 +40,11 @@ class HittableList : public Hittable
 
         return hitAnything;
     }
+    
+    Aabb boundingBox() const override { return bbox; }
+
+private:
+    Aabb bbox;
 };
 
 #endif//_HITTABLE_LIST_H_

@@ -2,6 +2,7 @@
 #define _HITTABLE_H_
 
 #include "common.h"
+#include "aabb.h"
 
 class Material;
 
@@ -12,6 +13,8 @@ public:
     glm::dvec4 normal;
     shared_ptr<Material> mat;
     double t;
+    double u;
+    double v;
     bool frontFace;
 
     void setFaceNormal(const Ray& r, const glm::dvec4& outwardNormal)
@@ -29,6 +32,7 @@ class Hittable
 public:
     virtual ~Hittable() = default;
     virtual bool hit(const Ray& r, Interval rayT, HitRecord &rec) const = 0;
+    virtual Aabb boundingBox() const = 0;
 };
 
 #endif//_HITTABLE_H_

@@ -12,6 +12,7 @@ set(CMAKE_MAKEFILE_DEPENDS
   "CMakeFiles/3.28.1/CMakeCXXCompiler.cmake"
   "CMakeFiles/3.28.1/CMakeSystem.cmake"
   "dep_glm-prefix/tmp/dep_glm-mkdirs.cmake"
+  "dep_stb-prefix/tmp/dep_stb-mkdirs.cmake"
   "/opt/homebrew/Cellar/cmake/3.28.1/share/cmake/Modules/CMakeCInformation.cmake"
   "/opt/homebrew/Cellar/cmake/3.28.1/share/cmake/Modules/CMakeCXXInformation.cmake"
   "/opt/homebrew/Cellar/cmake/3.28.1/share/cmake/Modules/CMakeCommonLanguageInclude.cmake"
@@ -60,6 +61,12 @@ set(CMAKE_MAKEFILE_PRODUCTS
   "dep_glm-prefix/src/dep_glm-stamp/dep_glm-update-info.txt"
   "dep_glm-prefix/src/dep_glm-stamp/dep_glm-patch-info.txt"
   "dep_glm-prefix/tmp/dep_glm-cfgcmd.txt"
+  "dep_stb-prefix/tmp/dep_stb-mkdirs.cmake"
+  "dep_stb-prefix/tmp/dep_stb-gitclone.cmake"
+  "dep_stb-prefix/src/dep_stb-stamp/dep_stb-gitinfo.txt"
+  "dep_stb-prefix/src/dep_stb-stamp/dep_stb-update-info.txt"
+  "dep_stb-prefix/src/dep_stb-stamp/dep_stb-patch-info.txt"
+  "dep_stb-prefix/tmp/dep_stb-cfgcmd.txt"
   "CMakeFiles/CMakeDirectoryInformation.cmake"
   )
 
@@ -67,4 +74,5 @@ set(CMAKE_MAKEFILE_PRODUCTS
 set(CMAKE_DEPEND_INFO_FILES
   "CMakeFiles/RT.dir/DependInfo.cmake"
   "CMakeFiles/dep_glm.dir/DependInfo.cmake"
+  "CMakeFiles/dep_stb.dir/DependInfo.cmake"
   )
