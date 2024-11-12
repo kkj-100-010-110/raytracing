@@ -1330,6 +1330,7 @@ CMakeFiles/RT.dir/main.cpp.o: \
   /Users/gyeongjukim/my_git/raytracing/hittable_list.h \
   /Users/gyeongjukim/my_git/raytracing/sphere.h \
   /Users/gyeongjukim/my_git/raytracing/quad.h \
+  /Users/gyeongjukim/my_git/raytracing/primitives.h \
   /Users/gyeongjukim/my_git/raytracing/camera.h \
   /Users/gyeongjukim/my_git/raytracing/material.h \
   /Users/gyeongjukim/my_git/raytracing/texture.h \

@@ -4,6 +4,7 @@
 #include "hittable_list.h"
 #include "sphere.h"
 #include "quad.h"
+#include "primitives.h"
 #include "camera.h"
 #include "material.h"
 #include "bvh.h"
@@ -15,19 +16,21 @@ void checkeredSpheres();
 void earth();
 void perlinSpheres();
 void quads();
+void primitives();
 
 int main()
 {
     /* Timer Begin */
     Timer timer;
 
-    switch (5)
+    switch (6)
     {
         case 1: boundingSpheres(); break;
         case 2: checkeredSpheres(); break;
         case 3: earth(); break;
         case 4: perlinSpheres(); break;
         case 5: quads(); break;
+        case 6: primitives(); break;
     }
 
     /* Timer End */
@@ -203,6 +206,41 @@ void quads()
     world.add(make_shared<Quad>(glm::dvec4(3, -2, 1, 0), glm::dvec4(0, 0, 4, 0), glm::dvec4(0, 4, 0, 0), rightBlue));
     world.add(make_shared<Quad>(glm::dvec4(-2, 3, 1, 0), glm::dvec4(4, 0, 0, 0), glm::dvec4(0, 0, 4, 0), upperOrange));
     world.add(make_shared<Quad>(glm::dvec4(-2, -3, 5, 0), glm::dvec4(4, 0, 0, 0), glm::dvec4(0, 0, -4, 0), lowerTeal));
+
+    Camera cam;
+
+    cam.aspectRatio = 1.0;
+    cam.imageWidth = 400;
+    cam.samplesPerPixel = 100;
+    cam.maxDepth = 50;
+
+    cam.vfov = 80;
+    cam.lookFrom = glm::dvec4(0, 0, 9, 0);
+    cam.lookAt = glm::dvec4(0, 0, 0, 0);
+    cam.vUp = glm::dvec4(0, 1, 0, 0);
+
+    cam.defocusAngle = 0;
+
+    cam.render(world);
+}
+
+void primitives()
+{
+    HittableList world;
+
+    // Materials
+    auto leftRed = make_shared<Lambertian>(color(1.0, 0.2, 0.2, 0.0));
+    auto backGreen = make_shared<Lambertian>(color(0.2, 1.0, 0.2, 0.0));
+    auto rightBlue = make_shared<Lambertian>(color(0.2, 0.2, 1.0, 0.0));
+    auto upperOrange = make_shared<Lambertian>(color(1.0, 0.5, 0.0, 0.0));
+    auto lowerTeal = make_shared<Lambertian>(color(0.2, 0.8, 0.8, 0.0));
+
+    world.add(make_shared<Circle>(glm::dvec4(-3, 0, 4, 0), glm::dvec4(0, 0, -2, 0), glm::dvec4(0, 2, 0, 0), leftRed));
+    world.add(make_shared<Triangle>(glm::dvec4(0, -2, 0, 0), glm::dvec4(3, 0, 0, 0), glm::dvec4(0, 3, 0, 0), backGreen));
+    world.add(make_shared<Triangle>(glm::dvec4(0, -2, 0, 0), glm::dvec4(-3, 0, 0, 0), glm::dvec4(0, 3, 0, 0), backGreen));
+    world.add(make_shared<Quad>(glm::dvec4(3, -2, 1, 0), glm::dvec4(0, 0, 4, 0), glm::dvec4(0, 4, 0, 0), rightBlue));
+    world.add(make_shared<Annuli>(glm::dvec4(0, 3, 1, 0), glm::dvec4(4, 0, 0, 0), glm::dvec4(0, 0, 4, 0), upperOrange));
+    world.add(make_shared<Ellipses>(glm::dvec4(0, -3, 5, 0), glm::dvec4(4, 0, 0, 0), glm::dvec4(0, 0, -4, 0), lowerTeal));
 
     Camera cam;
 

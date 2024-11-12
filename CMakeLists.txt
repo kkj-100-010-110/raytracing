@@ -27,6 +27,7 @@ add_executable(${PROJECT_NAME}
     rtw_stb_image.h
     perlin.h
     quad.h
+    primitives.h
     )
 
 target_include_directories(${PROJECT_NAME} PUBLIC ${DEP_INCLUDE_DIR})

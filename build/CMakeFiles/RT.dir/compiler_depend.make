@@ -1334,6 +1334,7 @@ CMakeFiles/RT.dir/main.cpp.o: /Users/gyeongjukim/my_git/raytracing/main.cpp \
   /Users/gyeongjukim/my_git/raytracing/interval.h \
   /Users/gyeongjukim/my_git/raytracing/material.h \
   /Users/gyeongjukim/my_git/raytracing/perlin.h \
+  /Users/gyeongjukim/my_git/raytracing/primitives.h \
   /Users/gyeongjukim/my_git/raytracing/quad.h \
   /Users/gyeongjukim/my_git/raytracing/ray.h \
   /Users/gyeongjukim/my_git/raytracing/rtw_stb_image.h \
@@ -3488,6 +3489,8 @@ install/include/glm/detail/type_mat4x3.hpp:
 /Library/Developer/CommandLineTools/SDKs/MacOSX15.1.sdk/usr/include/c++/v1/climits:
 
 /Library/Developer/CommandLineTools/SDKs/MacOSX15.1.sdk/usr/include/c++/v1/__algorithm/max_element.h:
+
+/Users/gyeongjukim/my_git/raytracing/primitives.h:
 
 /Library/Developer/CommandLineTools/SDKs/MacOSX15.1.sdk/usr/include/c++/v1/__atomic/check_memory_order.h:
 
