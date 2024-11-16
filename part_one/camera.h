@@ -12,13 +12,13 @@ public:
     int32_t samplesPerPixel = 10; // Count of random samples for each pixel
     int32_t maxDepth = 10;        // Maximum number of ray bounces into scene
 
-    double vfov = 90; // Vertical view angle(field of view)
-    glm::dvec4 lookFrom = glm::dvec4(0.0, 0.0, 0.0, 0.0);   // Camera is looking from
-    glm::dvec4 lookAt = glm::dvec4(0.0, 0.0, -1.0, 0.0);    // Camera is looking at
-    glm::dvec4 vUp = glm::dvec4(0.0, 1.0, 0.0, 0.0);        // Camera-relative up direction
+    double vfov = 90;                                // Vertical view angle(field of view)
+    glm::dvec3 lookFrom = glm::dvec3(0.0, 0.0, 0.0); // Camera is looking from
+    glm::dvec3 lookAt = glm::dvec3(0.0, 0.0, -1.0);  // Camera is looking at
+    glm::dvec3 vUp = glm::dvec3(0.0, 1.0, 0.0);      // Camera-relative up direction
 
-    double defocusAngle = 0;  // Variation angle of rays through each pixel
-    double focusDist = 10;    // Distance from camera lookfrom point to plane of perfect focus
+    double defocusAngle = 0; // Variation angle of rays through each pixel
+    double focusDist = 10;   // Distance from camera lookfrom point to plane of perfect focus
 
     void render(const Hittable& world)
     {
@@ -30,7 +30,7 @@ public:
             std::clog << "\rScanlines remaining: " << (imageHeight - j) << ' ' << std::flush;
             for (int32_t i = 0; i < imageWidth; i++)
             {
-                color pixelColor(0, 0, 0, 0);
+                color pixelColor(0, 0, 0);
                 for (int sample = 0; sample < samplesPerPixel; sample++)
                 {
                     Ray r = getRay(i, j);
@@ -42,16 +42,16 @@ public:
         std::clog << "\rDone.                 \n";
     }
 
-  private:
-    int32_t imageHeight;        // Rendered image height
-    double pixelSamplesScale;   // Color scale factor for a sum of pixel samples
-    glm::dvec4 center;          // Camera center
-    glm::dvec4 pixelZeroLoc;    // Location of pixel(0, 0)
-    glm::dvec4 pixelDeltaU;     // Offset to pixel to the right
-    glm::dvec4 pixelDeltaV;     // Offset to pixel below
-    glm::dvec4 u, v, w;         // Camera frame basis vectors
-    glm::dvec4 defocusDiskU;    // Defocus disk horizontal radius
-    glm::dvec4 defocusDiskV;    // Defocus disk vertical radius
+private:
+    int32_t imageHeight;      // Rendered image height
+    double pixelSamplesScale; // Color scale factor for a sum of pixel samples
+    glm::dvec3 center;        // Camera center
+    glm::dvec3 pixelZeroLoc;  // Location of pixel(0, 0)
+    glm::dvec3 pixelDeltaU;   // Offset to pixel to the right
+    glm::dvec3 pixelDeltaV;   // Offset to pixel below
+    glm::dvec3 u, v, w;       // Camera frame basis vectors
+    glm::dvec3 defocusDiskU;  // Defocus disk horizontal radius
+    glm::dvec3 defocusDiskV;  // Defocus disk vertical radius
 
     void initialize()
     {
@@ -66,26 +66,24 @@ public:
         // Determin viewport dimensions.
         // double focalLength = glm::length(lookFrom - lookAt);
         auto theta = glm::radians(vfov); // degree to radian
-        auto h = glm::tan(theta/2);
+        auto h = glm::tan(theta / 2);
         // auto viewportHeight = 2 * h * focalLength;
         auto viewportHeight = 2 * h * focusDist;
         double viewportWidth = viewportHeight * (static_cast<double>(imageWidth) / imageHeight);
 
         // Calculate the u,v,w unit basis vectors for the camera coordinate frame.
         w = glm::normalize(lookFrom - lookAt);
-        glm::dvec3 crossProduct = glm::cross(glm::dvec3(vUp), glm::dvec3(w));
-        u = glm::normalize(glm::dvec4(crossProduct, 0.0));
-        crossProduct = glm::cross(glm::dvec3(w), glm::dvec3(u));
-        v = glm::dvec4(crossProduct, 0.0);
+        u = glm::normalize((glm::cross(vUp, w)));
+        v = (glm::cross(w, u));
 
         // Calculate the vectors across the horizontal and down the vertical viewport edges.
-        glm::dvec4 viewportU = viewportWidth * u;   // Vector across viewport horizontal edge
-        glm::dvec4 viewportV = viewportHeight * -v; // Vector down viewport vertical edge
+        glm::dvec3 viewportU = viewportWidth * u;   // Vector across viewport horizontal edge
+        glm::dvec3 viewportV = viewportHeight * -v; // Vector down viewport vertical edge
         // Calculate the horizontal and vertical delta vectors from pixel to pixel.
         pixelDeltaU = viewportU / static_cast<double>(imageWidth);
         pixelDeltaV = viewportV / static_cast<double>(imageHeight);
         // Calculate the location of the upper left pixel.
-        glm::dvec4 viewportUpperLeft = center - (focusDist * w) - viewportU / 2.0 - viewportV / 2.0;
+        glm::dvec3 viewportUpperLeft = center - (focusDist * w) - viewportU / 2.0 - viewportV / 2.0;
         pixelZeroLoc = viewportUpperLeft + 0.5 * (pixelDeltaU + pixelDeltaV);
         // Calculate the camera defocus disk basis vectors.
         auto defocusRadius = focusDist * std::tan(degreesToRadians(defocusAngle / 2));
@@ -100,19 +98,21 @@ public:
         auto offset = sampleSquare();
         auto pixelSample = pixelZeroLoc + ((i + offset.x) * pixelDeltaU) + ((j + offset.y) * pixelDeltaV);
 
-        auto rayOrigin = (defocusAngle <= 0) ? center : defocusDiskSample();;
+        auto rayOrigin = (defocusAngle <= 0) ? center : defocusDiskSample();
+        ;
         auto rayDirection = pixelSample - rayOrigin;
 
         return Ray(rayOrigin, rayDirection);
     }
 
-    glm::dvec4 sampleSquare() const
+    glm::dvec3 sampleSquare() const
     {
         // Returns the vector to a random point in the [-.5,-.5]-[+.5,+.5] unit square.
-        return glm::dvec4(randomDouble() - 0.5, randomDouble() - 0.5, 0, 0);
+        return glm::dvec3(randomDouble() - 0.5, randomDouble() - 0.5, 0);
     }
 
-    glm::dvec4 defocusDiskSample() const {
+    glm::dvec3 defocusDiskSample() const
+    {
         // Returns a random point in the camera defocus disk.
         auto p = randomInUnitDisk();
         return center + (p[0] * defocusDiskU) + (p[1] * defocusDiskV);
@@ -121,7 +121,7 @@ public:
     color rayColor(const Ray& r, int32_t depth, const Hittable& world) const
     {
         if (depth <= 0)
-            return color(0, 0, 0, 0);
+            return color(0, 0, 0);
 
         HitRecord rec;
         if (world.hit(r, Interval(0.001, infinity), rec))
@@ -129,15 +129,15 @@ public:
             Ray scattered;
             color attenuation;
             if (rec.mat->scatter(r, rec, attenuation, scattered))
-                return attenuation * rayColor(scattered, depth-1, world);
-            return color(0,0,0,0);
+                return attenuation * rayColor(scattered, depth - 1, world);
+            return color(0, 0, 0);
         }
 
-        glm::dvec4 unitDirection = glm::normalize(r.direction());
+        glm::dvec3 unitDirection = glm::normalize(r.direction());
         auto a = 0.5 * (unitDirection.y + 1.0);
 
-        return lerp(color(1.0, 1.0, 1.0, 0.0), color(0.5, 0.7, 1.0, 0.0), a);
+        return lerp(color(1.0, 1.0, 1.0), color(0.5, 0.7, 1.0), a);
     }
 };
 
-#endif//_CAMERA_H_
+#endif //_CAMERA_H_

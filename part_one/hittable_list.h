@@ -8,7 +8,7 @@
 
 class HittableList : public Hittable
 {
-  public:
+public:
     std::vector<shared_ptr<Hittable>> objects;
 
     HittableList() {}
@@ -38,4 +38,4 @@ class HittableList : public Hittable
     }
 };
 
-#endif//_HITTABLE_LIST_H_
+#endif //_HITTABLE_LIST_H_

@@ -1,19 +1,19 @@
 #ifndef _COMMON_H_
 #define _COMMON_H_
 
+#include <algorithm>
+#include <chrono> // for Timer class
 #include <cmath>
 #include <iostream>
 #include <limits>
 #include <memory>
 #include <random>
-#include <algorithm>
-#include <chrono> // for Timer class
 
 /* GLM */
 #include <glm/glm.hpp>
+#include <glm/gtc/constants.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
-#include <glm/gtc/constants.hpp>
 
 /* Timer */
 class Timer
@@ -22,7 +22,7 @@ class Timer
     using secont_t = std::chrono::duration<double, std::ratio<1>>;
 
     // as soon as an object is created, it records the start time.
-    std::chrono::time_point<clock_t> start_time = clock_t::now();   
+    std::chrono::time_point<clock_t> start_time = clock_t::now();
 
 public:
     void elapsed()
@@ -45,15 +45,9 @@ const double pi = glm::pi<double>();
 
 // Utility Functions
 /* Linear interpolation */
-inline glm::dvec4 lerp(const glm::dvec4& v1, const glm::dvec4& v2, double t)
-{
-    return (1 - t) * v1 + t * v2;
-}
+inline glm::dvec3 lerp(const glm::dvec3& v1, const glm::dvec3& v2, double t) { return (1 - t) * v1 + t * v2; }
 /* Here I use GLM, so glm::radian(degree) will replace this function */
-inline double degreesToRadians(double degrees)
-{
-    return degrees * pi / 180.0;
-}
+inline double degreesToRadians(double degrees) { return degrees * pi / 180.0; }
 /* Keep updating this function */
 inline double randomDouble(double min = 0.0, double max = 1.0)
 {
@@ -62,49 +56,51 @@ inline double randomDouble(double min = 0.0, double max = 1.0)
     return distribution(generator);
 }
 /* Return a 4D(but it uses only 3 components) vector with random values */
-inline glm::dvec4 randomVector(double min = 0.0, double max = 1.0)
+inline glm::dvec3 randomVector(double min = 0.0, double max = 1.0)
 {
-    return glm::dvec4(randomDouble(min, max), randomDouble(min, max), randomDouble(min, max), 0);
+    return glm::dvec3(randomDouble(min, max), randomDouble(min, max), randomDouble(min, max));
 }
 /* Return a 4D(but it uses only 3 components) unit vector for a random vector */
-inline glm::dvec4 randomUnitVector()
+inline glm::dvec3 randomUnitVector()
 {
     while (true)
     {
-        glm::dvec4 p = randomVector(-1, 1);
+        glm::dvec3 p = randomVector(-1, 1);
         auto lengthSquare = glm::dot(p, p);
         if (1e-160 < lengthSquare && lengthSquare <= 1)
             return glm::normalize(p); // p / sqrt(lengthSquare);
     }
 }
 /* Return a 4D(but it uses only 3 components) vector that is on the hemisphere */
-inline glm::dvec4 randomOnHemisphere(const glm::dvec4& normal)
+inline glm::dvec3 randomOnHemisphere(const glm::dvec3& normal)
 {
-    glm::dvec4 onUnitSphere = randomUnitVector();
-    if (glm::dot(onUnitSphere, normal) > 0.0) return onUnitSphere;
-    else return -onUnitSphere;
+    glm::dvec3 onUnitSphere = randomUnitVector();
+    if (glm::dot(onUnitSphere, normal) > 0.0)
+        return onUnitSphere;
+    else
+        return -onUnitSphere;
 }
 
-inline bool nearZero(const glm::dvec4& vec)
+inline bool nearZero(const glm::dvec3& vec)
 {
     auto epsilon = 1e-8;
-    // return glm::all(glm::epsilonEqual(vec, glm::dvec4(0.0), epsilon)); // slower than below
+    // return glm::all(glm::epsilonEqual(vec, glm::dvec3(0.0), epsilon)); // slower than below
     return glm::dot(vec, vec) < epsilon * epsilon;
 }
 
-inline glm::dvec4 refract(const glm::dvec4& r, const glm::dvec4& n, double etaiOverEtat)
+inline glm::dvec3 refract(const glm::dvec3& r, const glm::dvec3& n, double etaiOverEtat)
 {
     auto cosTheta = std::fmin(dot(-r, n), 1.0);
-    glm::dvec4 rOutPerpendicular =  etaiOverEtat * (r + cosTheta * n);
-    glm::dvec4 rOutParallel = -std::sqrt(std::fabs(1.0 - glm::dot(rOutPerpendicular, rOutPerpendicular))) * n;
+    glm::dvec3 rOutPerpendicular = etaiOverEtat * (r + cosTheta * n);
+    glm::dvec3 rOutParallel = -std::sqrt(std::fabs(1.0 - glm::dot(rOutPerpendicular, rOutPerpendicular))) * n;
     return rOutPerpendicular + rOutParallel;
 }
 
-inline glm::dvec4 randomInUnitDisk()
+inline glm::dvec3 randomInUnitDisk()
 {
     while (true)
     {
-        auto p = glm::dvec4(randomDouble(-1, 1), randomDouble(-1, 1), 0, 0);
+        auto p = glm::dvec3(randomDouble(-1, 1), randomDouble(-1, 1), 0);
         if (glm::dot(p, p) < 1)
             return p;
     }
@@ -112,7 +108,7 @@ inline glm::dvec4 randomInUnitDisk()
 
 // Common Headers
 #include "color.h"
-#include "ray.h"
 #include "interval.h"
+#include "ray.h"
 
-#endif//_COMMON_H_
+#endif //_COMMON_H_

@@ -6,11 +6,11 @@
 class Sphere : public Hittable
 {
 public:
-    Sphere(const glm::dvec4& center, double radius, shared_ptr<Material> mat) : center(center), radius(std::fmax(0, radius)), mat(mat) {}
+    Sphere(const glm::dvec3& center, double radius, shared_ptr<Material> mat) : center(center), radius(std::fmax(0, radius)), mat(mat) {}
 
-    bool hit(const Ray &r, Interval rayT, HitRecord &rec) const override
+    bool hit(const Ray& r, Interval rayT, HitRecord& rec) const override
     {
-        glm::dvec4 oc = center - r.origin();
+        glm::dvec3 oc = center - r.origin();
         auto a = glm::dot(r.direction(), r.direction());
         auto h = glm::dot(r.direction(), oc);
         auto c = glm::dot(oc, oc) - radius * radius;
@@ -30,7 +30,7 @@ public:
 
         rec.t = root;
         rec.p = r.at(rec.t);
-        glm::dvec4 outwardNormal = (rec.p - center) / radius;
+        glm::dvec3 outwardNormal = (rec.p - center) / radius;
         rec.setFaceNormal(r, outwardNormal);
         rec.mat = mat;
 
@@ -38,9 +38,9 @@ public:
     }
 
 private:
-    glm::dvec4 center;
+    glm::dvec3 center;
     double radius;
     shared_ptr<Material> mat;
 };
 
-#endif//_SPHERE_H_
+#endif //_SPHERE_H_

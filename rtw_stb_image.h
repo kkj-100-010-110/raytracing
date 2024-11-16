@@ -3,13 +3,13 @@
 
 // Disable strict warnings for this header from the Microsoft Visual C++ compiler.
 #ifdef _MSC_VER
-    #pragma warning (push, 0)
+    #pragma warning(push, 0)
 #endif
 
 #define STB_IMAGE_IMPLEMENTATION
 #define STBI_FAILURE_USERMSG
-#include <stb/stb_image.h>
 
+#include <stb/stb_image.h>
 #include <cstdlib>
 #include <iostream>
 
@@ -18,7 +18,7 @@ class RtwImage
 public:
     RtwImage() {}
 
-    RtwImage(const char* imageFilename)
+    RtwImage(const char* image_filename)
     {
         // Loads image data from the specified file. If the RTW_IMAGES environment variable is
         // defined, looks only in that directory for the image file. If the image was not found,
@@ -27,21 +27,30 @@ public:
         // parent, on so on, for six levels up. If the image was not loaded successfully,
         // width() and height() will return 0.
 
-        auto filename = std::string(imageFilename);
-        auto imageDir = getenv("RTW_IMAGES");
+        auto filename = std::string(image_filename);
+        auto imagedir = getenv("RTW_IMAGES");
 
         // Hunt for the image file in some likely locations.
-        if (imageDir && load(std::string(imageDir) + "/" + imageFilename)) return;
-        if (load(filename)) return;
-        if (load("images/" + filename)) return;
-        if (load("../images/" + filename)) return;
-        if (load("../../images/" + filename)) return;
-        if (load("../../../images/" + filename)) return;
-        if (load("../../../../images/" + filename)) return;
-        if (load("../../../../../images/" + filename)) return;
-        if (load("../../../../../../images/" + filename)) return;
+        if (imagedir && load(std::string(imagedir) + "/" + image_filename))
+            return;
+        if (load(filename))
+            return;
+        if (load("images/" + filename))
+            return;
+        if (load("../images/" + filename))
+            return;
+        if (load("../../images/" + filename))
+            return;
+        if (load("../../../images/" + filename))
+            return;
+        if (load("../../../../images/" + filename))
+            return;
+        if (load("../../../../../images/" + filename))
+            return;
+        if (load("../../../../../../images/" + filename))
+            return;
 
-        std::cerr << "ERROR: Could not load image file '" << imageFilename << "'.\n";
+        std::cerr << "ERROR: Could not load image file '" << image_filename << "'.\n";
     }
 
     ~RtwImage()
@@ -50,7 +59,7 @@ public:
         STBI_FREE(fdata);
     }
 
-    bool load(const std::string &filename)
+    bool load(const std::string& filename)
     {
         // Loads the linear (gamma=1) image data from the given file name. Returns true if the
         // load succeeded. The resulting data buffer contains the three [0.0, 1.0]
@@ -71,7 +80,7 @@ public:
     int width() const { return (fdata == nullptr) ? 0 : imageWidth; }
     int height() const { return (fdata == nullptr) ? 0 : imageHeight; }
 
-    const unsigned char *pixel_data(int x, int y) const
+    const unsigned char* pixel_data(int x, int y) const
     {
         // Return the address of the three RGB bytes of the pixel at x,y. If there is no image
         // data, returns magenta.
@@ -87,8 +96,8 @@ public:
 
 private:
     const int bytesPerPixel = 3;
-    float *fdata = nullptr;         // Linear floating point pixel data
-    unsigned char *bdata = nullptr; // Linear 8-bit pixel data
+    float* fdata = nullptr;         // Linear floating point pixel data
+    unsigned char* bdata = nullptr; // Linear 8-bit pixel data
     int imageWidth = 0;            // Loaded image width
     int imageHeight = 0;           // Loaded image height
     int bytesPerScanline = 0;
@@ -96,14 +105,17 @@ private:
     static int clamp(int x, int low, int high)
     {
         // Return the value clamped to the range [low, high).
-        if (x < low) return low;
-        if (x < high) return x;
+        if (x < low)
+            return low;
+        if (x < high)
+            return x;
         return high - 1;
     }
 
     static unsigned char floatToByte(float value)
     {
-        if (value <= 0.0) return 0;
+        if (value <= 0.0)
+            return 0;
         if (1.0 <= value)
             return 255;
         return static_cast<unsigned char>(256.0 * value);
@@ -120,8 +132,8 @@ private:
         // Iterate through all pixel components, converting from [0.0, 1.0] float values to
         // unsigned [0, 255] byte values.
 
-        auto *bptr = bdata;
-        auto *fptr = fdata;
+        auto* bptr = bdata;
+        auto* fptr = fdata;
         for (auto i = 0; i < total_bytes; i++, fptr++, bptr++)
             *bptr = floatToByte(*fptr);
     }

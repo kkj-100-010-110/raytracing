@@ -13,8 +13,8 @@ set(CMAKE_CXX_FLAGS "-framework OpenCL")
 project(${PROJECT_NAME})
 add_executable(${PROJECT_NAME}
     main.cpp
-    common.h
     color.h
+    common.h
     ray.h
     hittable.h
     hittable_list.h
@@ -81,6 +81,21 @@ target_link_libraries(${PROJECT_NAME} PUBLIC ${DEP_LIBS})
 
 # Dependency들이 먼저 build 될 수 있게 관계 설정
 add_dependencies(${PROJECT_NAME} ${DEP_LIST})
+
+# # for code profiler 
+# # gperftools 라이브러리 및 헤더 경로 설정
+# set(GPERFTOOLS_LIBRARIES "/opt/homebrew/Cellar/gperftools/2.16/lib/libprofiler.0.dylib")
+# set(GPERFTOOLS_INCLUDE_DIRS "/opt/homebrew/Cellar/gperftools/2.16/include/gperftools")
+
+# # 라이브러리와 헤더 파일 경로 포함
+# include_directories(${GPERFTOOLS_INCLUDE_DIRS})
+# target_link_libraries(${PROJECT_NAME} ${GPERFTOOLS_LIBRARIES})
+
+# # 프로파일링을 위한 코드 추가
+# add_custom_target(run_with_profiler
+#     COMMAND env CPUPROFILE=rt_program.prof ./RT
+#     WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
+# )
 
 #
 # configure : cmake -Bbuild . -DCMAKE_BUILD_TYPE=[Debug|Release]

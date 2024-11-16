@@ -1,8 +1,6 @@
 #ifndef _AABB_H_
 #define _AABB_H_
 
-#include "common.h"
-
 class Aabb
 {
 public:
@@ -10,13 +8,9 @@ public:
 
     Aabb() {} // The default AABB is empty, since intervals are empty by default.
 
-    Aabb(const Interval &x, const Interval &y, const Interval &z)
-        : x(x), y(y), z(z)
-        {
-            padToMinimums();
-        }
+    Aabb(const Interval& x, const Interval& y, const Interval& z) : x(x), y(y), z(z) { padToMinimums(); }
 
-    Aabb(const glm::dvec4 &a, const glm::dvec4 &b)
+    Aabb(const Point& a, const Point& b)
     {
         // Treat the two points a and b as extrema for the bounding box, so we don't require a
         // particular minimum/maximum coordinate order.
@@ -28,23 +22,23 @@ public:
         padToMinimums();
     }
 
-    Aabb(const Aabb &box0, const Aabb &box1)
+    Aabb(const Aabb& box0, const Aabb& box1)
     {
         x = Interval(box0.x, box1.x);
         y = Interval(box0.y, box1.y);
         z = Interval(box0.z, box1.z);
     }
 
-    const Interval &axisInterval(int n) const { return n == 0 ? x : n == 1 ? y : z; }
+    const Interval& axisInterval(int n) const { return (n == 0) ? x : (n == 1) ? y : z; }
 
-    bool hit(const Ray &r, Interval rayT) const
+    bool hit(const Ray& r, Interval rayT) const
     {
-        const glm::dvec4 &rayOrig = r.origin();
-        const glm::dvec4 &rayDir = r.direction();
+        const Point& rayOrig = r.origin();
+        const glm::dvec3& rayDir = r.direction();
 
         for (int axis = 0; axis < 3; axis++)
         {
-            const Interval &ax = axisInterval(axis);
+            const Interval& ax = axisInterval(axis);
             const double adinv = 1.0 / rayDir[axis];
 
             auto t0 = (ax.min - rayOrig[axis]) * adinv;
@@ -66,9 +60,10 @@ public:
         return true;
     }
 
-    // Returns the index of the longest axis of the bounding box.
     int longestAxis() const
     {
+        // Returns the index of the longest axis of the bounding box.
+
         if (x.size() > y.size()) return x.size() > z.size() ? 0 : 2;
         else return y.size() > z.size() ? 1 : 2;
     }
@@ -87,7 +82,11 @@ private:
     }
 };
 
-const Aabb Aabb::empty    = Aabb(Interval::empty,    Interval::empty,    Interval::empty);
+const Aabb Aabb::empty = Aabb(Interval::empty, Interval::empty, Interval::empty);
 const Aabb Aabb::universe = Aabb(Interval::universe, Interval::universe, Interval::universe);
+
+Aabb operator+(const Aabb& bbox, const glm::dvec3& offset) { return Aabb(bbox.x + offset.x, bbox.y + offset.y, bbox.z + offset.z); }
+
+Aabb operator+(const glm::dvec3& offset, const Aabb& bbox) { return bbox + offset; }
 
 #endif//_AABB_H_

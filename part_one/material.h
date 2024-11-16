@@ -3,15 +3,13 @@
 
 #include "hittable.h"
 
-class Material {
-  public:
+class Material
+{
+public:
     virtual ~Material() = default;
 
-    virtual bool scatter(const Ray &rIn
-                        , const HitRecord &rec
-                        , color &attenuation
-                        , Ray &scattered)
-                        const { return false; }
+    virtual bool scatter(const Ray &rIn, const HitRecord &rec, color &attenuation, Ray &scattered)
+        const { return false; }
 };
 
 class Lambertian : public Material
@@ -43,7 +41,7 @@ public:
 
     bool scatter(const Ray &rIn, const HitRecord &rec, color &attenuation, Ray &scattered) const override
     {
-        glm::dvec4 reflected = glm::reflect(rIn.direction(), rec.normal);
+        glm::dvec3 reflected = glm::reflect(rIn.direction(), rec.normal);
         // fuzzy reflection
         // reflected = glm::normalize(reflected) + (fuzz + randomUnitVector());
         // non-fuzzy reflection
@@ -65,16 +63,16 @@ public:
 
     bool scatter(const Ray &rIn, const HitRecord &rec, color &attenuation, Ray &scattered) const override
     {
-        attenuation = color(1.0, 1.0, 1.0, 0.0);
+        attenuation = color(1.0, 1.0, 1.0);
         double ri = rec.frontFace ? (1.0 / refractionIndex) : refractionIndex;
 
-        glm::dvec4 unitDirection = glm::normalize(rIn.direction());
+        glm::dvec3 unitDirection = glm::normalize(rIn.direction());
 
         double cosTheta = std::fmin(glm::dot(-unitDirection, rec.normal), 1.0);
         double sinTheta = std::sqrt(1.0 - cosTheta * cosTheta);
 
         bool cannotRefract = ri * sinTheta > 1.0;
-        glm::dvec4 direction;
+        glm::dvec3 direction;
 
         if (cannotRefract || reflectance(cosTheta, ri) > randomDouble())
             direction = glm::reflect(unitDirection, rec.normal);
@@ -100,4 +98,4 @@ private:
     }
 };
 
-#endif//_MATERIAL_H_
+#endif //_MATERIAL_H_

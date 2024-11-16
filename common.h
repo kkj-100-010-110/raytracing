@@ -1,19 +1,26 @@
 #ifndef _COMMON_H_
 #define _COMMON_H_
 
+#include <cmath>
+#include <cstdlib>
 #include <iostream>
 #include <limits>
-#include <memory>
-#include <random>
-#include <algorithm>
-#include <chrono> // for Timer class
-#include <cmath>
+#include <memory> // std::shared_ptr(), std::make_shared()
+#include <chrono> // Timer
 
 /* GLM */
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 #include <glm/gtc/constants.hpp>
+
+/* C++ Std Usings */
+using std::make_shared;
+using std::shared_ptr;
+
+/* Constants */
+const double INF = std::numeric_limits<double>::infinity();
+const double PI = 3.1415926535897932385;
 
 /* Timer */
 class Timer
@@ -22,7 +29,7 @@ class Timer
     using secont_t = std::chrono::duration<double, std::ratio<1>>;
 
     // as soon as an object is created, it records the start time.
-    std::chrono::time_point<clock_t> start_time = clock_t::now();   
+    std::chrono::time_point<clock_t> start_time = clock_t::now();
 
 public:
     void elapsed()
@@ -35,87 +42,93 @@ public:
     }
 };
 
-// C++ Std Usings
-using std::make_shared;
-using std::shared_ptr;
+/* Maths & Utilities */
 
-// Constants
-const double infinity = std::numeric_limits<double>::infinity();
-const double pi = glm::pi<double>();
+// Point is just an alias for glm::dvec4, but useful for geometric clarity in the code.
+using Point = glm::dvec3;
 
-// Utility Functions
-/* Linear interpolation */
-inline glm::dvec4 lerp(const glm::dvec4& v1, const glm::dvec4& v2, double t)
+inline double randomDoubleGen()
 {
-    return (1 - t) * v1 + t * v2;
-}
-/* Here I use GLM, so glm::radian(degree) will replace this function */
-inline double degreesToRadians(double degrees)
-{
-    return degrees * pi / 180.0;
-}
-/* Keep updating this function */
-inline double randomDouble(double min = 0.0, double max = 1.0)
-{
-    static std::uniform_real_distribution<double> distribution(min, max);
-    static std::mt19937 generator;
-    return distribution(generator);
-}
-/* Return a 4D(but it uses only 3 components) vector with random values */
-inline glm::dvec4 randomVector(double min = 0.0, double max = 1.0)
-{
-    return glm::dvec4(randomDouble(min, max), randomDouble(min, max), randomDouble(min, max), 0);
-}
-/* Return a 4D(but it uses only 3 components) unit vector for a random vector */
-inline glm::dvec4 randomUnitVector()
-{
-    while (true)
-    {
-        glm::dvec4 p = randomVector(-1, 1);
-        auto lengthSquare = glm::dot(p, p);
-        if (1e-160 < lengthSquare && lengthSquare <= 1)
-            return glm::normalize(p); // p / sqrt(lengthSquare);
-    }
-}
-/* Return a 4D(but it uses only 3 components) vector that is on the hemisphere */
-inline glm::dvec4 randomOnHemisphere(const glm::dvec4& normal)
-{
-    glm::dvec4 onUnitSphere = randomUnitVector();
-    if (glm::dot(onUnitSphere, normal) > 0.0) return onUnitSphere;
-    else return -onUnitSphere;
+    // Returns a random real in [0,1).
+    return std::rand() / (RAND_MAX + 1.0);
 }
 
-inline bool nearZero(const glm::dvec4& vec)
+inline double randomDoubleGen(double min, double max)
+{
+    // Returns a random real in [min,max).
+    return min + (max - min) * randomDoubleGen();
+}
+
+inline int randomIntGen(int min, int max)
+{
+    // Returns a random integer in [min,max].
+    return int(randomDoubleGen(min, max + 1));
+}
+
+inline bool nearZero(glm::dvec3& vec)
 {
     auto epsilon = 1e-8;
-    // return glm::all(glm::epsilonEqual(vec, glm::dvec4(0.0), epsilon)); // slower than below
-    return glm::dot(vec, vec) < epsilon * epsilon;
+    return (std::fabs(vec.x) < epsilon) && (std::fabs(vec.y) < epsilon) && (std::fabs(vec.z) < epsilon);
 }
 
-inline glm::dvec4 refract(const glm::dvec4& r, const glm::dvec4& n, double etaiOverEtat)
+inline glm::dvec3 randomVectorGen()
 {
-    auto cosTheta = std::fmin(dot(-r, n), 1.0);
-    glm::dvec4 rOutPerpendicular =  etaiOverEtat * (r + cosTheta * n);
-    glm::dvec4 rOutParallel = -std::sqrt(std::fabs(1.0 - glm::dot(rOutPerpendicular, rOutPerpendicular))) * n;
-    return rOutPerpendicular + rOutParallel;
+    return glm::dvec3(randomDoubleGen(), randomDoubleGen(), randomDoubleGen());
 }
 
-inline glm::dvec4 randomInUnitDisk()
+inline glm::dvec3 randomVectorGen(double min, double max)
+{
+    return glm::dvec3(randomDoubleGen(min, max), randomDoubleGen(min, max), randomDoubleGen(min, max));
+}
+
+inline glm::dvec3 randomInUnitDisk()
 {
     while (true)
     {
-        auto p = glm::dvec4(randomDouble(-1, 1), randomDouble(-1, 1), 0, 0);
+        auto p = glm::dvec3(randomDoubleGen(-1, 1), randomDoubleGen(-1, 1), 0);
         if (glm::dot(p, p) < 1)
             return p;
     }
 }
 
-// Returns a random integer in [min,max].
-inline int randomInt(int min, int max) { return int(randomDouble(min, max + 1)); }
+glm::dvec3 lerp(const glm::dvec3& v1, const glm::dvec3& v2, double t) { return (1 - t) * v1 + t * v2; }
 
-// Common Headers
+inline glm::dvec3 randomUnitVectorGen()
+{
+    while (true)
+    {
+        auto p = randomVectorGen(-1, 1);
+        auto pLength = glm::dot(p, p);
+        if (1e-160 < pLength && pLength <= 1.0)
+            return p / std::sqrt(pLength);
+    }
+}
+
+inline glm::dvec3 randomOnHemisphere(const glm::dvec3& normal)
+{
+    glm::dvec3 onUnitSphere = randomUnitVectorGen();
+    if (glm::dot(onUnitSphere, normal) > 0.0) // In the same hemisphere as the normal
+        return onUnitSphere;
+    else
+        return -onUnitSphere;
+}
+
+inline glm::dvec3 reflect(const glm::dvec3& v, const glm::dvec3& n) { return v - 2 * glm::dot(v, n) * n; }
+
+inline glm::dvec3 refract(const glm::dvec3& uv, const glm::dvec3& n, double etaiOverEtat)
+{
+    auto cosTheta = std::fmin(glm::dot(-uv, n), 1.0);
+    glm::dvec3 rOutPerp = etaiOverEtat * (uv + cosTheta * n);
+    glm::dvec3 rOutParallel = -std::sqrt(std::fabs(1.0 - glm::dot(rOutPerp, rOutPerp))) * n;
+    return rOutPerp + rOutParallel;
+}
+
+// replace this function with glm::radians()
+inline double degreesToRadians(double degrees) { return degrees * PI / 180.0; }
+
+/* Common Headers */
 #include "color.h"
-#include "ray.h"
 #include "interval.h"
+#include "ray.h"
 
 #endif//_COMMON_H_

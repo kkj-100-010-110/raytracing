@@ -1,7 +1,7 @@
 #ifndef _HITTABLE_LIST_H_
 #define _HITTABLE_LIST_H_
 
-#include "common.h"
+#include "aabb.h"
 #include "hittable.h"
 
 #include <vector>
@@ -18,7 +18,7 @@ public:
 
     void add(shared_ptr<Hittable> object)
     {
-        objects.emplace_back(object);
+        objects.push_back(object);
         bbox = Aabb(bbox, object->boundingBox());
     }
 
@@ -40,7 +40,7 @@ public:
 
         return hitAnything;
     }
-    
+
     Aabb boundingBox() const override { return bbox; }
 
 private:

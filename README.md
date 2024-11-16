@@ -9,6 +9,5 @@
 
 To build
 - cmake --build build --config Debug
-
 To make an image
 - ./build/RT > image.ppm
