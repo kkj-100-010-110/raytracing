@@ -21,12 +21,13 @@ void simpleLight();
 void cornellBox();
 void cornellSmoke();
 void finalScene(int imageWidth, int samplesPerPixel, int maxDepth);
+void test();
 
 int main()
 {
     Timer timer;
 
-    switch (8)
+    switch (10)
     {
         case 1: bouncingSpheres(); break;
         case 2: checkeredSpheres(); break;
@@ -38,7 +39,8 @@ int main()
         case 8: cornellBox(); break;
         case 9: cornellSmoke(); break;
         case 10: finalScene(800, 10000, 40); break;
-        default: finalScene(400, 250, 4); break;
+        case 11: test(); break;
+        default: test(); break;
     }
 
     timer.elapsed();
@@ -244,12 +246,15 @@ void primitives()
     auto lowerTeal = make_shared<Lambertian>(Color(0.2, 0.8, 0.8));
 
     // Primitives
-    world.add(make_shared<Circle>(Point(-3, -0.5, 4), glm::dvec3(0, 0, -1.5), glm::dvec3(0, 1.5, 0), leftRed, 1));
-    world.add(make_shared<Triangle>(Point(0, -2, 0), glm::dvec3(3, 0, 0), glm::dvec3(0, 3, 0), backGreen));
-    world.add(make_shared<Triangle>(Point(0, -2, 0), glm::dvec3(-3, 0, 0), glm::dvec3(0, 3, 0), backGreen));
-    world.add(make_shared<Quad>(Point(4, -2, 1), glm::dvec3(0, 0, 3), glm::dvec3(0, 3, 0), rightBlue));
-    world.add(make_shared<Annuli>(Point(0, 3, 1), glm::dvec3(2, 0, 0), glm::dvec3(0, 0, 2), upperOrange, 0.8, 1.5));
-    world.add(make_shared<Ellipse>(Point(0, -3, 5), glm::dvec3(2, 0, 0), glm::dvec3(0, 0, -2), lowerTeal, 0.5, 1.5));
+    // world.add(make_shared<Circle>(Point(-3, -0.5, 4), glm::dvec3(0, 0, -1.5), glm::dvec3(0, 1.5, 0), leftRed, 1));
+    // world.add(make_shared<Triangle>(Point(0, -2, 0), glm::dvec3(3, 0, 0), glm::dvec3(0, 3, 0), backGreen));
+    // world.add(make_shared<Triangle>(Point(0, -2, 0), glm::dvec3(-3, 0, 0), glm::dvec3(0, 3, 0), backGreen));
+    // world.add(make_shared<Quad>(Point(4, -2, 1), glm::dvec3(0, 0, 3), glm::dvec3(0, 3, 0), rightBlue));
+    // world.add(make_shared<Annuli>(Point(0, 3, 1), glm::dvec3(2, 0, 0), glm::dvec3(0, 0, 2), upperOrange, 0.8, 1.5));
+    // world.add(make_shared<Ellipse>(Point(0, -3, 5), glm::dvec3(2, 0, 0), glm::dvec3(0, 0, -2), lowerTeal, 0.5, 1.5));
+    // world.add(make_shared<Parabola>(Point(0, -2, 0), glm::dvec3(-3, 0, 0), glm::dvec3(0, 3, 0), backGreen, -0.5, false));
+    // world.add(make_shared<Parabola>(Point(0, -2, 0), glm::dvec3(-3, 0, 0), glm::dvec3(0, 3, 0), backGreen, 0.5, false));
+    world.add(make_shared<Hyperbola>(Point(0, -2, 0), glm::dvec3(-3, 0, 0), glm::dvec3(0, 3, 0), backGreen, 2, 1.5));
 
     Camera cam;
 
@@ -315,18 +320,15 @@ void cornellBox()
     world.add(make_shared<Quad>(Point(555, 555, 555), glm::dvec3(-555, 0, 0), glm::dvec3(0, 0, -555), white));
     world.add(make_shared<Quad>(Point(0, 0, 555), glm::dvec3(555, 0, 0), glm::dvec3(0, 555, 0), white));
 
-    world.add(box(glm::dvec3(130, 0, 65), glm::dvec3(295, 165, 230), white));
-    world.add(box(glm::dvec3(265, 0, 295), glm::dvec3(430, 330, 460), white));
+    shared_ptr<Hittable> box1 = box(Point(0,0,0), Point(165,330,165), white);
+    box1 = make_shared<RotateZ>(box1, 15);
+    box1 = make_shared<Translate>(box1, glm::dvec3(265,0,295));
+    world.add(box1);
 
-    // shared_ptr<Hittable> box1 = box(Point(0,0,0), Point(165,330,165), white);
-    // box1 = make_shared<rotate_y>(box1, 15);
-    // box1 = make_shared<translate>(box1, glm::dvec3(265,0,295));
-    // world.add(box1);
-
-    // shared_ptr<Hittable> box2 = box(Point(0,0,0), Point(165,165,165), white);
-    // box2 = make_shared<rotate_y>(box2, -18);
-    // box2 = make_shared<translate>(box2, glm::dvec3(130,0,65));
-    // world.add(box2);
+    shared_ptr<Hittable> box2 = box(Point(0,0,0), Point(165,165,165), white);
+    box2 = make_shared<RotateZ>(box2, -18);
+    box2 = make_shared<Translate>(box2, glm::dvec3(130,0,65));
+    world.add(box2);
 
     Camera cam;
 
@@ -363,15 +365,15 @@ void cornellSmoke()
     world.add(make_shared<Quad>(Point(0, 0, 555), glm::dvec3(555, 0, 0), glm::dvec3(0, 555, 0), white));
 
     shared_ptr<Hittable> box1 = box(Point(0, 0, 0), Point(165, 330, 165), white);
-    box1 = make_shared<rotate_y>(box1, 15);
-    box1 = make_shared<translate>(box1, glm::dvec3(265, 0, 295));
+    box1 = make_shared<RotateY>(box1, 15);
+    box1 = make_shared<Translate>(box1, glm::dvec3(265, 0, 295));
 
     shared_ptr<Hittable> box2 = box(Point(0, 0, 0), Point(165, 165, 165), white);
-    box2 = make_shared<rotate_y>(box2, -18);
-    box2 = make_shared<translate>(box2, glm::dvec3(130, 0, 65));
+    box2 = make_shared<RotateY>(box2, -18);
+    box2 = make_shared<Translate>(box2, glm::dvec3(130, 0, 65));
 
-    world.add(make_shared<constant_medium>(box1, 0.01, Color(0, 0, 0)));
-    world.add(make_shared<constant_medium>(box2, 0.01, Color(1, 1, 1)));
+    world.add(make_shared<ConstantMedium>(box1, 0.01, Color(0, 0, 0)));
+    world.add(make_shared<ConstantMedium>(box2, 0.01, Color(1, 1, 1)));
 
     Camera cam;
 
@@ -430,11 +432,11 @@ void finalScene(int imageWidth, int samplesPerPixel, int maxDepth)
 
     auto boundary = make_shared<Sphere>(Point(360, 150, 145), 70, make_shared<Dielectric>(1.5));
     world.add(boundary);
-    world.add(make_shared<constant_medium>(boundary, 0.2, Color(0.2, 0.4, 0.9)));
+    world.add(make_shared<ConstantMedium>(boundary, 0.2, Color(0.2, 0.4, 0.9)));
     boundary = make_shared<Sphere>(Point(0, 0, 0), 5000, make_shared<Dielectric>(1.5));
-    world.add(make_shared<constant_medium>(boundary, .0001, Color(1, 1, 1)));
+    world.add(make_shared<ConstantMedium>(boundary, .0001, Color(1, 1, 1)));
 
-    auto emat = make_shared<Lambertian>(make_shared<ImageTexture>("earthmap.jpg"));
+    auto emat = make_shared<Lambertian>(make_shared<ImageTexture>("./image/earthmap.jpg"));
     world.add(make_shared<Sphere>(Point(400, 200, 400), 100, emat));
     auto pertext = make_shared<NoiseTexture>(0.2);
     world.add(make_shared<Sphere>(Point(220, 280, 300), 80, make_shared<Lambertian>(pertext)));
@@ -447,7 +449,7 @@ void finalScene(int imageWidth, int samplesPerPixel, int maxDepth)
         boxes2.add(make_shared<Sphere>(randomVectorGen(0, 165), 10, white));
     }
 
-    world.add(make_shared<translate>(make_shared<rotate_y>(make_shared<BvhNode>(boxes2), 15), glm::dvec3(-100, 270, 395)));
+    world.add(make_shared<Translate>(make_shared<RotateY>(make_shared<BvhNode>(boxes2), 15), glm::dvec3(-100, 270, 395)));
 
     Camera cam;
 
@@ -459,6 +461,48 @@ void finalScene(int imageWidth, int samplesPerPixel, int maxDepth)
 
     cam.verticalFov = 40;
     cam.lookFrom = Point(478, 278, -600);
+    cam.lookAt = Point(278, 278, 0);
+    cam.vUp = glm::dvec3(0, 1, 0);
+
+    cam.defocusAngle = 0;
+
+    cam.render(world);
+}
+
+void test()
+{
+    HittableList world;
+
+    auto red = make_shared<Lambertian>(Color(.65, .05, .05));
+    auto white = make_shared<Lambertian>(Color(.73, .73, .73));
+    auto green = make_shared<Lambertian>(Color(.12, .45, .15));
+    auto light = make_shared<DiffuseLight>(Color(15, 15, 15));
+
+    world.add(make_shared<Quad>(Point(555, 0, 0), glm::dvec3(0, 555, 0), glm::dvec3(0, 0, 555), green));
+    world.add(make_shared<Quad>(Point(0, 0, 0), glm::dvec3(0, 555, 0), glm::dvec3(0, 0, 555), red));
+    world.add(make_shared<Quad>(Point(343, 554, 332), glm::dvec3(-130, 0, 0), glm::dvec3(0, 0, -105), light));
+    world.add(make_shared<Quad>(Point(0, 0, 0), glm::dvec3(555, 0, 0), glm::dvec3(0, 0, 555), white));
+    world.add(make_shared<Quad>(Point(555, 555, 555), glm::dvec3(-555, 0, 0), glm::dvec3(0, 0, -555), white));
+    world.add(make_shared<Quad>(Point(0, 0, 555), glm::dvec3(555, 0, 0), glm::dvec3(0, 555, 0), white));
+
+    shared_ptr<Hittable> box1 = box(Point(0,0,0), Point(165,330,165), white);
+    box1 = make_shared<RotateZ>(box1, 15);
+    box1 = make_shared<Translate>(box1, glm::dvec3(265,0,295));
+    world.add(box1);
+
+    shared_ptr<Hittable> box2 = box(Point(0,0,0), Point(165,165,165), white);
+    box2 = make_shared<RotateZ>(box2, -18);
+    box2 = make_shared<Translate>(box2, glm::dvec3(130,0,65));
+    world.add(box2);
+
+    Camera cam;
+
+    cam.aspectRatio = 1.0;
+    cam.imageWidth = 600;
+    cam.background = Color(0, 0, 0);
+
+    cam.verticalFov = 40;
+    cam.lookFrom = Point(278, 278, -800);
     cam.lookAt = Point(278, 278, 0);
     cam.vUp = glm::dvec3(0, 1, 0);
 

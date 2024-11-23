@@ -28,6 +28,7 @@ add_executable(${PROJECT_NAME}
     perlin.h
     quad.h
     primitives.h
+    constant_medium.h
     )
 
 target_include_directories(${PROJECT_NAME} PUBLIC ${DEP_INCLUDE_DIR})

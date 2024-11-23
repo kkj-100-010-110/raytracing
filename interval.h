@@ -45,7 +45,6 @@ const Interval Interval::empty = Interval(+INF, -INF);
 const Interval Interval::universe = Interval(-INF, +INF);
 
 Interval operator+(const Interval& ival, double displacement) { return Interval(ival.min + displacement, ival.max + displacement); }
-
 Interval operator+(double displacement, const Interval& ival) { return ival + displacement; }
 
 #endif
